@@ -1,0 +1,2121 @@
+{
+  "info": {
+    "_postman_id": "0676095f-d58a-4f7a-980d-3b41814a8958",
+    "name": "Groccery Store",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41257543",
+    "_collection_link": "https://go.postman.co/collection/41257543-0676095f-d58a-4f7a-980d-3b41814a8958?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get Access Token",
+      "item": [
+        {
+          "name": "01-Happy Path",
+          "item": [
+            {
+              "name": "Get Access Token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema = {\r",
+                      "    type: \"object\",\r",
+                      "    required: [\"accessToken\"],\r",
+                      "    properties: {\r",
+                      "        accessToken: { type: \"string\" }\r",
+                      "       \r",
+                      "    }\r",
+                      "};\r",
+                      "const response = pm.response.json();\r",
+                      "pm.test(\"Status code is 201\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response body is valid\", function () {\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "    });\r",
+                      "\r",
+                      "\r",
+                      "pm.environment.set(\"AccessToken\", pm.response.json().accessToken);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"clientName\": \"{{$randomFullName}}\",\r\n\"clientEmail\":\"{{$randomEmail}}\"\r\n\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api-clients",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api-clients"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02-validation",
+          "item": [
+            {
+              "name": "Get Access Token-repeatative email",
+              "item": [
+                {
+                  "name": "Get Access Token -201",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "const response = pm.response.json();\r",
+                          "pm.test(\"Status code is 201\", function () {\r",
+                          "    pm.response.to.have.status(201);\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "const email = pm.variables.replaceIn('{{$randomEmail}}')\r",
+                          "console.log(email)\r",
+                          "pm.collectionVariables.set(\"clientEmail\", email);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\"clientName\": \"{{$randomFullName}}\",\r\n\"clientEmail\":\"{{clientEmail}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api-clients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-clients"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get Access Token- repeatative email-409",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "const schema = {\r",
+                          "    \"type\": \"object\",\r",
+                          "    required: [\"error\"],\r",
+                          "    properties:\r",
+                          "    {\r",
+                          "        error: { type: \"string\" }\r",
+                          "    }\r",
+                          "}\r",
+                          "\r",
+                          "pm.test('response body matches schema', function () {\r",
+                          "    pm.response.to.have.jsonSchema(schema);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test('status code is 409', function () {\r",
+                          "    pm.response.to.have.status(409);\r",
+                          "\r",
+                          "})"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n\"clientName\": \"{{$randomFullName}}\",\r\n\"clientEmail\":\"{{clientEmail}}\"\r\n\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api-clients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api-clients"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Get Access Token-Empty body-400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema = {\r",
+                      "    \"type\": \"object\",\r",
+                      "    required: [\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error: { type: \"string\" }\r",
+                      "    }\r",
+                      "}\r",
+                      "\r",
+                      "pm.test('response body matches schema', function () {\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test('status code is 400', function()\r",
+                      "{\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "})\r",
+                      "pm.test(\"check error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid or missing client name.\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api-clients",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api-clients"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Access Token-Empty name-400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    \"type\": \"object\",\r",
+                      "    required: [\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error: { type: \"string\" }\r",
+                      "    }\r",
+                      "}\r",
+                      "\r",
+                      "pm.test('response body matches schema', function () {\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test('status code is 400', function()\r",
+                      "{\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "})\r",
+                      "pm.test(\"check error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid or missing client name.\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"clientEmail\":\"{{$randomEmail}}\"\r\n\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api-clients",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api-clients"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Access Token - Empty email-400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    \"type\": \"object\",\r",
+                      "    required: [\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error: { type: \"string\" }\r",
+                      "    }\r",
+                      "}\r",
+                      "\r",
+                      "pm.test('response body matches schema', function () {\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test('status code is 400', function()\r",
+                      "{\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "})\r",
+                      "pm.test(\"check error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid or missing client email.\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"clientName\": \"{{$randomFullName}}\"\r\n\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api-clients",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api-clients"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Get List Of Products",
+      "item": [
+        {
+          "name": "01-Happy path",
+          "item": [
+            {
+              "name": "Get List of Products-without filter",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "/// contract testing \r",
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have name and category and id \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list contains at least one product\", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "    pm.environment.set(\"ProductId\", result[0].id);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-filter with category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have fresh produce category \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.eq( 'fresh-produce')\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list contains at least one product\", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "  \r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?category=fresh-produce",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "fresh-produce"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-filter with result",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have name and category and id \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list should contain exactly 5 products\", () => {\r",
+                      "    pm.expect(result).to.have.length(5);\r",
+                      "  \r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?results=5",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "results",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products- filter with available",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should not be available \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.eq(false)\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list should contain at least one \", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "  \r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?available=false",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "available",
+                      "value": "false"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-filter all",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have candy category and be available \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.eq(true)\r",
+                      "            && pm.expect(product.category).to.eq('candy')\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list should contain at least one \", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "  \r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Product list should contain exactly 2 products\", () => {\r",
+                      "    pm.expect(result).to.have.length(2);\r",
+                      "  \r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?category=candy&results=2&available=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "candy"
+                    },
+                    {
+                      "key": "results",
+                      "value": "2"
+                    },
+                    {
+                      "key": "available",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02-validation",
+          "item": [
+            {
+              "name": "Get List of Products-invalid category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid value for query parameter 'category'. Must be one of: coffee, fresh-produce, meat-seafood, candy, dairy, bread-bakery, eggs\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 400\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(400);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?category=XXX",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "XXX"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-invalid result<0",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid value for query parameter 'results'. Must be greater than 0.\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 400\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(400);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?results=-1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "results",
+                      "value": "-1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-invalid available",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid value for query parameter 'available'. Must be one of: true, false\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 400\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(400);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?available=hello",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "available",
+                      "value": "hello"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List of Products-result >max",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"Invalid value for query parameter 'results'. Cannot be greater than 20.\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 400\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(400);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products?results=21",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "results",
+                      "value": "21"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Get a single product",
+      "item": [
+        {
+          "name": "01-Happy path",
+          "item": [
+            {
+              "name": "Get List of Products-without filter",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "/// contract testing \r",
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have name and category and id \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list contains at least one product\", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "    pm.environment.set(\"ProductId\", result[0].id);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Product-with product label",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema = {\r",
+                      "    type: \"object\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\", \"manufacturer\", \"price\", \"current-stock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"string\" },\r",
+                      "        manufacturer: { type: \"string\" },\r",
+                      "        price: { type: \"number\" },\r",
+                      "        \"current-stock\": {\r",
+                      "            type: \"number\"\r",
+                      "        },\r",
+                      "        \"product-label\": { type: \"string\" }\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test('response body matches contract', function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "\r",
+                      "})\r",
+                      "    ;\r",
+                      "const response = pm.response.json();\r",
+                      "pm.test(\"Status code is  200\", () => {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "pm.test(\"Product id is correct\", () => {\r",
+                      "    pm.expect(response.id).to.equal((pm.environment.get(\"ProductId\")));\r",
+                      "\r",
+                      "});\r",
+                      "pm.test(\" response should have product-label\", () => {\r",
+                      "    pm.expect(response[\"product-label\"]).to.not.be.empty;\r",
+                      "});\r",
+                      "pm.test(\"product fields have correct values\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    pm.expect(response.inStock).to.be.oneOf([true, false]);\r",
+                      "    pm.expect(response.id).to.be.greaterThan(0);\r",
+                      "    pm.expect(response.price).to.be.greaterThan(0);\r",
+                      "    pm.expect(response[\"current-stock\"]).to.be.greaterThanOrEqual(0);\r",
+                      "\r",
+                      "})\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "console.log(typeof pm.environment.get('ProductId'))"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products/:productId?product-label=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products",
+                    ":productId"
+                  ],
+                  "query": [
+                    {
+                      "key": "product-label",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "{{ProductId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get single product- without product label",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema = {\r",
+                      "    type: \"object\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\", \"manufacturer\", \"price\", \"current-stock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"string\" },\r",
+                      "        manufacturer: { type: \"string\" },\r",
+                      "        price: { type: \"number\" },\r",
+                      "        \"current-stock\": {\r",
+                      "            type: \"number\"\r",
+                      "        }\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test('response body matches contract', function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema);\r",
+                      "\r",
+                      "})\r",
+                      "    ;\r",
+                      "const response = pm.response.json();\r",
+                      "pm.test(\"Status code is  200\", () => {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "pm.test(\"Product id is correct\", () => {\r",
+                      "    pm.expect(response.id).to.equal((pm.environment.get(\"ProductId\")));\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"product fields have correct values\", function () {\r",
+                      "\r",
+                      "    pm.expect(response.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    pm.expect(response.inStock).to.be.oneOf([true, false]);\r",
+                      "    pm.expect(response.id).to.be.greaterThan(0);\r",
+                      "    pm.expect(response.price).to.be.greaterThan(0);\r",
+                      "    pm.expect(response[\"current-stock\"]).to.be.greaterThanOrEqual(0);\r",
+                      "\r",
+                      "})\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products/:productId?product-label=false",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products",
+                    ":productId"
+                  ],
+                  "query": [
+                    {
+                      "key": "product-label",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "{{ProductId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02-validation",
+          "item": [
+            {
+              "name": "Get List of Products-without filter",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "/// contract testing \r",
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have name and category and id \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list contains at least one product\", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "    pm.environment.set(\"ProductId\", result[0].id);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Product-missing product id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"The product id must be a number.\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 400\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(400);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "console.log(typeof pm.environment.get('ProductId'))"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products/:productId?product-label=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products",
+                    ":productId"
+                  ],
+                  "query": [
+                    {
+                      "key": "product-label",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Product-invalid product id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    type:\"object\",\r",
+                      "    required:[\"error\"],\r",
+                      "    properties:\r",
+                      "    {\r",
+                      "        error:{type:\"string\"}\r",
+                      "    }\r",
+                      "}\r",
+                      "pm.test(\"Check if the response body matches the schema\", function () {\r",
+                      "  pm.response.to.have.jsonSchema(schema)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Check if the response contains the correct error message\", function () {\r",
+                      "    pm.expect(pm.response.json().error).to.eql(\"No product with id 1000.\");\r",
+                      "});\r",
+                      "pm.test(\"Check if the response status code is 404\", function () {\r",
+                      "    pm.expect(pm.response.code).to.eql(404);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "console.log(typeof pm.environment.get('ProductId'))"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products/:productId?product-label=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products",
+                    ":productId"
+                  ],
+                  "query": [
+                    {
+                      "key": "product-label",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create Cart",
+      "item": [
+        {
+          "name": "01-Happy path",
+          "item": [
+            {
+              "name": "Create Carts",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    \"type\": \"object\",\r",
+                      "    \"properties\": {\r",
+                      "        \"created\": { \"type\": \"boolean\" },\r",
+                      "        \"cartId\": { \"type\": \"string\" }\r",
+                      "    },\r",
+                      "         required:['created','cartId']\r",
+                      "}\r",
+                      "\r",
+                      "pm.test(\"response body is valid\", () => pm.response.to.have.jsonSchema(schema)); // validate response body against schema\r",
+                      "\r",
+                      "pm.test(\"status code is 201\", ()=> pm.response.to.have.status(201));\r",
+                      "const response = pm.response.json(); // parse response body to json\r",
+                      "pm.test(\"response body has correct values\" , () =>\r",
+                      "{\r",
+                      "\r",
+                      "    pm.expect(response.cartId).to.not.be.empty;\r",
+                      "    pm.expect(response.created).to.be.true; // check if created property is true\r",
+                      "    pm.environment.set(\"CartId\",response.cartId)\r",
+                      "\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Carts-CartId is unique",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response=pm.response.json();\r",
+                      "pm.test(\"cart id is unique\", function(){\r",
+                      "    pm.expect(response.cartId).not.eq(pm.environment.get(\"CartId\"));\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02-validation",
+          "item": []
+        },
+        {
+          "name": "Create Carts Copy 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 201\", ()=> pm.response.to.have.status(201));\r",
+                  "const response = pm.response.json(); // parse response body to json\r",
+                  "pm.test(\"response body contains cartId\" , () =>\r",
+                  "{\r",
+                  "pm.expect(response).to.be.a('object');\r",
+                  "    pm.expect(response).to.have.property('cartId');\r",
+                  "    pm.expect(response.cartId).to.be.a('string');\r",
+                  "    pm.expect(response.cartId).to.not.be.empty;\r",
+                  "    pm.expect(response.created).to.be.true; // check if created property is true\r",
+                  "    pm.environment.set(\"CartId\",response.cartId)\r",
+                  "\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/carts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "carts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Add Items to Cart",
+      "item": [
+        {
+          "name": "01-Happy Path",
+          "item": [
+            {
+              "name": "Get List of Products-without filter",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "/// contract testing \r",
+                      "\r",
+                      "const schema = {\r",
+                      "    type: \"array\",\r",
+                      "    required: [\"id\", \"category\", \"name\", \"inStock\"],\r",
+                      "    properties: {\r",
+                      "        id: { type: \"number\" },\r",
+                      "        category: { type: \"string\" },\r",
+                      "        name: { type: \"number\" },\r",
+                      "        inStock: { type: \"boolean\" },\r",
+                      "    }\r",
+                      "};\r",
+                      "\r",
+                      "pm.test(\"response matches contract\", function () {\r",
+                      "\r",
+                      "    pm.response.to.have.jsonSchema(schema)\r",
+                      "})\r",
+                      "\r",
+                      "///\r",
+                      "\r",
+                      "\r",
+                      "const result = pm.response.json();\r",
+                      "pm.test(\"status code is 200\", () => pm.response.to.have.status(200));\r",
+                      "pm.test(\"all products should have name and category and id \", () => {\r",
+                      "    result.forEach((product, index) => {\r",
+                      "        pm.expect(product.category).not.to.be.empty\r",
+                      "            && pm.expect(product.name).not.to.be.empty\r",
+                      "            && pm.expect(product.id).to.not.be.null\r",
+                      "            && pm.expect(product.inStock).to.not.be.null\r",
+                      "            && pm.expect(product.category).to.be.oneOf(['coffee', 'fresh-produce', 'meat-seafood', 'candy', 'dairy', 'bread-bakery', 'eggs'])\r",
+                      "    });\r",
+                      "});\r",
+                      "pm.test(\"Product list contains at least one product\", () => {\r",
+                      "    pm.expect(result).to.have.length.of.at.least(1);\r",
+                      "    pm.environment.set(\"ProductId\", result[0].id);\r",
+                      "    pm.environment.set(\"SecondProductId\", result[1].id);\r",
+                      "\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/products",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Carts",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema ={\r",
+                      "    \"type\": \"object\",\r",
+                      "    \"properties\": {\r",
+                      "        \"created\": { \"type\": \"boolean\" },\r",
+                      "        \"cartId\": { \"type\": \"string\" }\r",
+                      "    },\r",
+                      "         required:['created','cartId']\r",
+                      "}\r",
+                      "\r",
+                      "pm.test(\"response body is valid\", () => pm.response.to.have.jsonSchema(schema)); // validate response body against schema\r",
+                      "\r",
+                      "pm.test(\"status code is 201\", ()=> pm.response.to.have.status(201));\r",
+                      "const response = pm.response.json(); // parse response body to json\r",
+                      "pm.test(\"response body has correct values\" , () =>\r",
+                      "{\r",
+                      "\r",
+                      "    pm.expect(response.cartId).to.not.be.empty;\r",
+                      "    pm.expect(response.created).to.be.true; // check if created property is true\r",
+                      "    pm.environment.set(\"CartId\",response.cartId)\r",
+                      "\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Items to cart",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema={\r",
+                      "    \"type\": \"object\",\r",
+                      "    \"properties\": {\r",
+                      "        \"created\": { \"type\": \"boolean\" },\r",
+                      "        \"itemId\": { \"type\": \"number\" }\r",
+                      "    },\r",
+                      "    \"required\": [\"created\", \"itemId\"]\r",
+                      "\r",
+                      "}\r",
+                      "const response = pm.response.json();\r",
+                      "pm.test(\"response body is valid\", () => pm.response.to.have.jsonSchema(schema));\r",
+                      "pm.test(\"status code is 201\", function(){\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "})\r",
+                      "pm.test(\"response body has correct values\", function(){\r",
+                      "\r",
+                      "    pm.expect(response.created).to.be.true;\r",
+                      "    pm.expect(response.itemId).to.be.greaterThan(0);\r",
+                      "\r",
+                      "})\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{ProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carts/:CartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carts",
+                    ":CartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "CartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Second Item to Cart",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const schema={\r",
+                      "    \"type\": \"object\",\r",
+                      "    \"properties\": {\r",
+                      "        \"created\": { \"type\": \"boolean\" },\r",
+                      "        \"itemId\": { \"type\": \"number\" }\r",
+                      "    },\r",
+                      "    \"required\": [\"created\", \"itemId\"]\r",
+                      "\r",
+                      "}\r",
+                      "const response = pm.response.json();\r",
+                      "pm.test(\"response body is valid\", () => pm.response.to.have.jsonSchema(schema));\r",
+                      "pm.test(\"status code is 201\", function(){\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "})\r",
+                      "pm.test(\"response body has correct values\", function(){\r",
+                      "\r",
+                      "    pm.expect(response.created).to.be.true;\r",
+                      "    pm.expect(response.itemId).to.be.greaterThan(0);\r",
+                      "\r",
+                      "})\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{SecondProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carts/:CartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carts",
+                    ":CartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "CartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "02-Validation",
+          "item": [
+            {
+              "name": "Add duplicated item to cart",
+              "item": []
+            },
+            {
+              "name": "New Folder",
+              "item": []
+            },
+            {
+              "name": "Add Items to cart -invalid Cart Id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"status code is 200\", ()=> pm.response.to.have.status(201));"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{ProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}//carts/:cartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "",
+                    "carts",
+                    ":cartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "cartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Items to cart -invalid Product Id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"status code is 200\", ()=> pm.response.to.have.status(201));"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{ProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}//carts/:cartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "",
+                    "carts",
+                    ":cartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "cartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Items to cart -invalid Quantity",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"status code is 200\", ()=> pm.response.to.have.status(201));"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{ProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}//carts/:cartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "",
+                    "carts",
+                    ":cartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "cartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Items to cart Copy",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"status code is 200\", ()=> pm.response.to.have.status(201));"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"productId\": {{ProductId}},\r\n\"quantity\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}//carts/:cartId/items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "",
+                    "carts",
+                    ":cartId",
+                    "items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "cartId",
+                      "value": "{{CartId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Status Copy",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let myList = [85,25,15,22,33];\r",
+              "let addResult =myList.push(66);\r",
+              "console.log(`my list contains these items ${myList}`);\r",
+              "console.log(`the result of push method is ${addResult}`);\r",
+              "\r",
+              "console.log(`removed item is ${myList.pop()}`);\r",
+              "\r",
+              "myList.forEach(a => console.log(a));\r",
+              "\r",
+              "\r",
+              "console.log( pm.variables.get(\"baseUrl\"));\r",
+              "console.log(pm.environment.name)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "status"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "clientEmail",
+      "value": ""
+    }
+  ]
+}
